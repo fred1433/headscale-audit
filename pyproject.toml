@@ -36,3 +36,6 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# The suite imports headscale_audit from src/, so it runs whether or not the
+# package has been installed into the environment.
+pythonpath = ["src"]

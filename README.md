@@ -8,7 +8,7 @@ to join it. Read only: it issues HTTP GET and nothing else, calls no AI service,
 needs no key of its own, and prints no key material.
 
 Point it at a `config.yaml`, a policy file and an export of the nodes; get back
-a Markdown and a JSON report where every finding carries what was read, why it
+a Markdown and JSON report where every finding carries what was read, why it
 matters, and the fix.
 
 ## Install and run
@@ -64,8 +64,8 @@ headscale-audit --config /etc/headscale/config.yaml --nodes nodes.json \
                 --gce-inventory instances.json
 ```
 
-The machines that never appear in headscale are the ones a rollout never
-reached; `rollout/probe.sh` runs on one of them and says which step fails.
+Machines that never appear in headscale are the ones the rollout never
+reached; `rollout/probe.sh` says which step fails on one of them.
 
 ## The laboratory
 
@@ -110,15 +110,22 @@ catches it.
 enrols, second run is a no-op, restart keeps the identity, expired key exits 3,
 foreign control server exits 5.
 
+## Development
+
+```shell
+uv run --extra dev pytest -q       # the suite, no install step needed
+python scripts/gen_checks_doc.py   # regenerate docs/checks.md
+./lab/up.sh && ./lab/audit.sh && ./lab/down.sh
+```
+
 ## What it does not do
 
 - No network scan, no connection to your nodes, no write of any kind.
-- Headscale API keys are administrative, there is no read-only scope: the
-  offline export is the preferred mode, and a connected run should use a short
-  lived key.
-- A userspace laboratory proves the control plane and the policy. It does not
-  prove systemd units, TUN interfaces or Linux firewall rules, and nothing here
-  has been run against a live GCE project.
+- Headscale API keys are administrative, there is no read-only scope: prefer
+  the offline export, and use a short lived key for a connected run.
+- A userspace laboratory proves the control plane and the policy, not systemd
+  units, TUN interfaces or Linux firewall rules; nothing here has been run
+  against a live GCE project.
 - Headscale also reads `HEADSCALE_*` environment variables, which override the
   file and are invisible to an audit of that file.
 - The controls are written against 0.29.3. On another version the tool says so
