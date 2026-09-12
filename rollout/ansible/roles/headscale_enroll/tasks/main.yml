@@ -1,0 +1,79 @@
+---
+# This role does not reimplement the enrolment: it ships rollout/enroll.sh and
+# runs it, so a machine enrolled by Ansible, by the GCE startup script or by
+# hand goes through exactly the same code.
+
+- name: Fail early when the control server is not set
+  ansible.builtin.assert:
+    that:
+      - headscale_url | length > 0
+    fail_msg: "headscale_url must be set (inventory or -e)"
+
+- name: Install the enrolment script
+  become: true
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../enroll.sh"
+    dest: "{{ headscale_enroll_script_dest }}"
+    mode: "0755"
+    owner: root
+    group: root
+
+- name: Create a private directory for the key
+  become: true
+  ansible.builtin.file:
+    path: /run/headscale-enroll
+    state: directory
+    mode: "0700"
+    owner: root
+    group: root
+
+- name: Copy the pre-auth key from the control machine
+  become: true
+  ansible.builtin.copy:
+    src: "{{ headscale_authkey_file }}"
+    dest: /run/headscale-enroll/authkey
+    mode: "0600"
+    owner: root
+    group: root
+  when: headscale_authkey_file | length > 0
+  no_log: true
+
+- name: Write the pre-auth key from a variable
+  become: true
+  ansible.builtin.copy:
+    content: "{{ headscale_authkey }}"
+    dest: /run/headscale-enroll/authkey
+    mode: "0600"
+    owner: root
+    group: root
+  when:
+    - headscale_authkey_file | length == 0
+    - headscale_authkey | length > 0
+  no_log: true
+
+- name: Enrol the node
+  become: true
+  ansible.builtin.command:
+    cmd: "{{ headscale_enroll_script_dest }}"
+  environment:
+    HEADSCALE_URL: "{{ headscale_url }}"
+    AUTHKEY_FILE: /run/headscale-enroll/authkey
+    HOSTNAME_OVERRIDE: "{{ inventory_hostname }}"
+    ACCEPT_DNS: "{{ headscale_accept_dns | lower }}"
+    ACCEPT_ROUTES: "{{ headscale_accept_routes | lower }}"
+    EXTRA_ARGS: "{{ headscale_extra_args }}"
+    ALLOW_RESET: "{{ '1' if headscale_allow_reset else '0' }}"
+    ALLOW_MIGRATE: "{{ '1' if headscale_allow_migrate else '0' }}"
+  register: headscale_enrolment
+  changed_when: "'nothing to do' not in headscale_enrolment.stdout"
+  failed_when: headscale_enrolment.rc != 0
+
+- name: Remove the key from the target
+  become: true
+  ansible.builtin.file:
+    path: /run/headscale-enroll/authkey
+    state: absent
+
+- name: Show what the node reports
+  ansible.builtin.debug:
+    msg: "{{ headscale_enrolment.stdout_lines | default([]) }}"

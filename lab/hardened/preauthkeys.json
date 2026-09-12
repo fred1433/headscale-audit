@@ -1,0 +1,36 @@
+{
+  "preAuthKeys": [
+    {
+      "user": {
+        "id": "1",
+        "name": "ops"
+      },
+      "id": "7",
+      "key": "REDACTED-IN-FIXTURE",
+      "reusable": true,
+      "ephemeral": true,
+      "used": true,
+      "expiration": "2026-10-02T09:00:00Z",
+      "createdAt": "2026-09-11T09:00:00Z",
+      "aclTags": [
+        "tag:web"
+      ]
+    },
+    {
+      "user": {
+        "id": "1",
+        "name": "ops"
+      },
+      "id": "8",
+      "key": "REDACTED-IN-FIXTURE",
+      "reusable": false,
+      "ephemeral": false,
+      "used": true,
+      "expiration": "2026-09-14T09:00:00Z",
+      "createdAt": "2026-09-11T09:00:00Z",
+      "aclTags": [
+        "tag:router"
+      ]
+    }
+  ]
+}

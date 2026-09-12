@@ -1,0 +1,108 @@
+# The same deployment after the findings of lab/insecure are fixed.
+# Keys follow headscale 0.29.3 (config-example.yaml).
+server_url: https://headscale.example.com
+listen_addr: 0.0.0.0:8080
+metrics_listen_addr: 127.0.0.1:9090
+grpc_listen_addr: 127.0.0.1:50443
+grpc_allow_insecure: false
+
+# Only the reverse proxy in front of headscale may set forwarding headers.
+trusted_proxies:
+  - 127.0.0.1/32
+
+noise:
+  private_key_path: /var/lib/headscale/noise_private.key
+
+prefixes:
+  v4: 100.64.0.0/10
+  v6: fd7a:115c:a1e0::/48
+  allocation: sequential
+
+derp:
+  server:
+    enabled: true
+    region_id: 999
+    region_code: "headscale"
+    region_name: "Headscale Embedded DERP"
+    verify_clients: true
+    stun_listen_addr: "0.0.0.0:3478"
+    private_key_path: /var/lib/headscale/derp_server_private.key
+    automatically_add_embedded_derp_region: true
+  urls: []
+  paths: []
+  auto_update_enabled: true
+  update_frequency: 3h
+
+disable_check_updates: false
+
+node:
+  expiry: 180d
+  ephemeral:
+    inactivity_timeout: 30m
+  routes:
+    ha:
+      probe_interval: 10s
+      probe_timeout: 5s
+
+database:
+  type: sqlite
+  sqlite:
+    path: /var/lib/headscale/db.sqlite
+    write_ahead_log: true
+    wal_autocheckpoint: 1000
+
+acme_url: https://acme-v02.api.letsencrypt.org/directory
+acme_email: "ops@example.com"
+tls_letsencrypt_hostname: headscale.example.com
+tls_letsencrypt_cache_dir: /var/lib/headscale/cache
+tls_letsencrypt_challenge_type: HTTP-01
+tls_letsencrypt_listen: ":http"
+tls_cert_path: ""
+tls_key_path: ""
+
+log:
+  level: info
+  format: json
+
+policy:
+  mode: file
+  path: /etc/headscale/policy.hujson
+
+# Nodes keep the resolver of their own network (on GCE this is what answers
+# for *.internal and for the metadata server); MagicDNS still resolves the
+# tailnet names because base_domain is served on top of it.
+dns:
+  magic_dns: true
+  base_domain: vpn.internal.example
+  override_local_dns: false
+  nameservers:
+    global: []
+    split: {}
+  search_domains: []
+  extra_records: []
+
+unix_socket: /var/run/headscale/headscale.sock
+unix_socket_permission: "0770"
+
+oidc:
+  # Workspace-only issuer: the tenant is the restriction, and the allow list
+  # below states it in the configuration as well.
+  issuer: "https://accounts.google.com"
+  client_id: "1234567890-example.apps.googleusercontent.com"
+  client_secret_path: "${CREDENTIALS_DIRECTORY}/oidc_client_secret"
+  scope: ["openid", "profile", "email"]
+  email_verified_required: true
+  allowed_domains:
+    - example.com
+  pkce:
+    enabled: true
+    method: S256
+
+logtail:
+  enabled: false
+
+taildrop:
+  enabled: true
+
+auto_update:
+  enabled: false

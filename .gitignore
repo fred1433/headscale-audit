@@ -1,0 +1,13 @@
+# Lab runtime state: binaries, databases, keys, sockets, logs
+lab/.run/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.ruff_cache/

@@ -1,0 +1,21 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "ops",
+      "createdAt": "2025-07-19T09:00:00Z",
+      "email": "ops@example.com"
+    },
+    {
+      "id": "2",
+      "name": "jan",
+      "createdAt": "2025-08-28T09:00:00Z",
+      "email": "jan@example.com"
+    },
+    {
+      "id": "3",
+      "name": "tagged-devices",
+      "createdAt": "2026-02-24T09:00:00Z"
+    }
+  ]
+}

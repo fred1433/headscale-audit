@@ -1,0 +1,61 @@
+// Same estate, rules written down.
+{
+  "groups": {
+    "group:ops": ["ops@"],
+    "group:staff": ["ops@", "jan@"],
+  },
+  "tagOwners": {
+    "tag:web": ["group:ops"],
+    "tag:router": ["group:ops"],
+    "tag:exit": ["group:ops"],
+  },
+  "hosts": {
+    "office": "192.168.10.0/24",
+  },
+  "autoApprovers": {
+    "routes": {
+      "10.132.0.0/20": ["tag:router"],
+    },
+  },
+  "grants": [
+    {
+      // Staff laptops reach the web tier, nothing else.
+      "src": ["group:staff"],
+      "dst": ["tag:web"],
+      "ip": ["80,443"],
+    },
+    {
+      // Operators administer the routers over SSH only.
+      "src": ["group:ops"],
+      "dst": ["tag:router"],
+      "ip": ["22"],
+    },
+    {
+      // The office subnet, reached through the router, is read only.
+      "src": ["group:ops"],
+      "dst": ["office"],
+      "ip": ["443"],
+    },
+    {
+      // Only operators may route their traffic through the exit node.
+      "src": ["group:ops"],
+      "dst": ["autogroup:internet"],
+      "ip": ["*"],
+    },
+  ],
+  "ssh": [
+    {
+      "action": "check",
+      "src": ["group:ops"],
+      "dst": ["tag:router"],
+      "users": ["autogroup:nonroot"],
+    },
+  ],
+  "tests": [
+    {
+      "src": "jan@",
+      "accept": ["tag:web:443"],
+      "deny": ["tag:router:22"],
+    },
+  ],
+}

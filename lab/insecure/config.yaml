@@ -1,0 +1,97 @@
+# Example of a Headscale deployment that grew by accident.
+# Field names follow headscale 0.29.3 (config-example.yaml), except where the
+# file still carries keys that were removed in earlier releases.
+server_url: http://headscale.example.com:8080
+listen_addr: 0.0.0.0:8080
+metrics_listen_addr: 0.0.0.0:9090
+grpc_listen_addr: 0.0.0.0:50443
+grpc_allow_insecure: true
+
+trusted_proxies:
+  - 0.0.0.0/0
+
+noise:
+  private_key_path: ""
+
+prefixes:
+  v4: 100.64.0.0/10
+  v6: fd7a:115c:a1e0::/48
+  allocation: sequential
+
+derp:
+  server:
+    enabled: true
+    region_id: 999
+    region_code: "headscale"
+    region_name: "Headscale Embedded DERP"
+    verify_clients: false
+    stun_listen_addr: ""
+    private_key_path: /var/lib/headscale/derp_server_private.key
+  urls:
+    - https://controlplane.tailscale.com/derpmap/default
+  paths: []
+  auto_update_enabled: true
+  update_frequency: 3h
+
+# Removed in 0.29: the server stops at startup while these are present.
+acl_policy_path: /etc/headscale/acl.hujson
+ephemeral_node_inactivity_timeout: 30s
+randomize_client_port: true
+
+dns_config:
+  base_domain: headscale.example.com
+
+node:
+  expiry: 0
+  ephemeral:
+    inactivity_timeout: 30s
+
+database:
+  type: sqlite
+  sqlite:
+    path: /var/lib/headscale/db.sqlite
+    write_ahead_log: false
+
+acme_url: https://acme-v02.api.letsencrypt.org/directory
+acme_email: ""
+tls_letsencrypt_hostname: vpn.example.com
+tls_letsencrypt_cache_dir: /var/lib/headscale/cache
+tls_letsencrypt_challenge_type: HTTP-01
+tls_cert_path: /etc/ssl/certs/headscale.pem
+tls_key_path: /etc/ssl/private/headscale.key
+
+log:
+  level: info
+  format: text
+
+policy:
+  mode: file
+  path: /etc/headscale/acl.hujson
+
+dns:
+  magic_dns: true
+  base_domain: headscale.example.com
+  override_local_dns: true
+  nameservers:
+    global: []
+    split: {}
+  search_domains: []
+  extra_records: []
+
+unix_socket: /var/run/headscale/headscale.sock
+unix_socket_permission: "0777"
+
+oidc:
+  issuer: "https://accounts.google.com"
+  client_id: "1234567890-example.apps.googleusercontent.com"
+  client_secret: "GOCSPX-not-a-real-secret-value"
+  scope: ["openid", "profile", "email"]
+
+logtail:
+  enabled: true
+
+taildrop:
+  enabled: true
+
+auto_update:
+  enabled: false

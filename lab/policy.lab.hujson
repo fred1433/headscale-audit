@@ -1,0 +1,17 @@
+// Lab policy: three roles, one deliberate boundary. The web tier reaches the
+// database tier on 8081, the CI node does not. lab/verify.sh proves both
+// directions against the running clients.
+{
+  "tagOwners": {
+    "tag:web": ["lab@"],
+    "tag:db": ["lab@"],
+    "tag:ci": ["lab@"],
+  },
+  "grants": [
+    {
+      "src": ["tag:web"],
+      "dst": ["tag:db"],
+      "ip": ["8081"],
+    },
+  ],
+}

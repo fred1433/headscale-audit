@@ -1,0 +1,19 @@
+# A one entry DERP map for the laboratory.
+#
+# Headscale refuses to start with an empty DERP map, and the lab must not reach
+# out to Tailscale's public relays, so it declares a region that is never used:
+# the three nodes live on the same host and connect directly. The address is
+# from RFC 5737 (documentation range) on purpose.
+regions:
+  900:
+    regionid: 900
+    regioncode: lab
+    regionname: Laboratory (unused)
+    nodes:
+      - name: 900a
+        regionid: 900
+        hostname: derp.lab.invalid
+        ipv4: 198.51.100.1
+        stunport: 0
+        stunonly: false
+        derpport: 0

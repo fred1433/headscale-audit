@@ -1,0 +1,44 @@
+// Policy of the same accidental deployment.
+{
+  "groups": {
+    "group:eng": ["alice@"],
+    "group:contractors": [],
+  },
+  "tagOwners": {
+    "tag:web": ["group:eng"],
+  },
+  "hosts": {
+    "bastion": "100.64.0.9/32",
+  },
+  "autoApprovers": {
+    "routes": {
+      "0.0.0.0/0": ["tag:exit"],
+    },
+    "exitNode": ["tag:exit"],
+  },
+  "acls": [
+    {
+      "action": "accept",
+      "src": ["*"],
+      "dst": ["*:*"],
+    },
+    {
+      "action": "accept",
+      "src": ["*"],
+      "dst": ["tag:db:5432"],
+    },
+    {
+      "action": "accept",
+      "src": ["autogroup:danger-all"],
+      "dst": ["tag:web:80,443"],
+    },
+  ],
+  "ssh": [
+    {
+      "action": "accept",
+      "src": ["*"],
+      "dst": ["*"],
+      "users": ["root"],
+    },
+  ],
+}

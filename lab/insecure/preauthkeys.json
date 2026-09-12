@@ -1,0 +1,61 @@
+[
+  {
+    "user": {
+      "id": 1,
+      "name": "ops"
+    },
+    "id": 1,
+    "key": "REDACTED-IN-FIXTURE",
+    "reusable": true,
+    "ephemeral": false,
+    "used": true,
+    "created_at": {
+      "seconds": 1763283600,
+      "nanos": 0
+    },
+    "acl_tags": [
+      "tag:web"
+    ]
+  },
+  {
+    "user": {
+      "id": 1,
+      "name": "ops"
+    },
+    "id": 2,
+    "key": "REDACTED-IN-FIXTURE",
+    "reusable": true,
+    "ephemeral": false,
+    "used": true,
+    "expiration": {
+      "seconds": 1820739600,
+      "nanos": 0
+    },
+    "created_at": {
+      "seconds": 1778835600,
+      "nanos": 0
+    },
+    "acl_tags": [
+      "tag:db"
+    ]
+  },
+  {
+    "user": {
+      "id": 2,
+      "name": "jan"
+    },
+    "id": 3,
+    "key": "REDACTED-IN-FIXTURE",
+    "reusable": false,
+    "ephemeral": false,
+    "used": true,
+    "expiration": {
+      "seconds": 1781427600,
+      "nanos": 0
+    },
+    "created_at": {
+      "seconds": 1781341200,
+      "nanos": 0
+    }
+  }
+]

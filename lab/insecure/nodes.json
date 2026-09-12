@@ -1,0 +1,143 @@
+[
+  {
+    "id": 1,
+    "machine_key": "mkey:redacted01",
+    "node_key": "nodekey:redacted01",
+    "ip_addresses": [
+      "100.64.0.1",
+      "fd7a:115c:a1e0::1"
+    ],
+    "name": "gce-web-01",
+    "user": {
+      "id": 1,
+      "name": "ops",
+      "created_at": {
+        "seconds": 1752915600,
+        "nanos": 0
+      }
+    },
+    "last_seen": {
+      "seconds": 1789200000,
+      "nanos": 0
+    },
+    "created_at": {
+      "seconds": 1753779600,
+      "nanos": 0
+    },
+    "register_method": "REGISTER_METHOD_AUTH_KEY",
+    "given_name": "gce-web-01",
+    "online": true,
+    "approved_routes": [],
+    "available_routes": [
+      "10.132.0.0/20"
+    ],
+    "subnet_routes": [],
+    "tags": []
+  },
+  {
+    "id": 2,
+    "machine_key": "mkey:redacted02",
+    "node_key": "nodekey:redacted02",
+    "ip_addresses": [
+      "100.64.0.2"
+    ],
+    "name": "gce-web-01",
+    "user": {
+      "id": 1,
+      "name": "ops",
+      "created_at": {
+        "seconds": 1752915600,
+        "nanos": 0
+      }
+    },
+    "last_seen": {
+      "seconds": 1772787600,
+      "nanos": 0
+    },
+    "created_at": {
+      "seconds": 1754643600,
+      "nanos": 0
+    },
+    "register_method": "REGISTER_METHOD_AUTH_KEY",
+    "given_name": "gce-web-01-1",
+    "online": false,
+    "approved_routes": [],
+    "available_routes": [],
+    "tags": []
+  },
+  {
+    "id": 3,
+    "machine_key": "mkey:redacted03",
+    "node_key": "nodekey:redacted03",
+    "ip_addresses": [
+      "100.64.0.3"
+    ],
+    "name": "laptop-jan",
+    "user": {
+      "id": 2,
+      "name": "jan",
+      "created_at": {
+        "seconds": 1756371600,
+        "nanos": 0
+      }
+    },
+    "last_seen": {
+      "seconds": 1785747600,
+      "nanos": 0
+    },
+    "expiry": {
+      "seconds": 1786179600,
+      "nanos": 0
+    },
+    "created_at": {
+      "seconds": 1756371600,
+      "nanos": 0
+    },
+    "register_method": "REGISTER_METHOD_CLI",
+    "given_name": "laptop-jan",
+    "online": false,
+    "approved_routes": [],
+    "available_routes": [],
+    "tags": []
+  },
+  {
+    "id": 4,
+    "machine_key": "mkey:redacted04",
+    "node_key": "nodekey:redacted04",
+    "ip_addresses": [
+      "100.64.0.4"
+    ],
+    "name": "gce-nat-01",
+    "user": {
+      "id": 1,
+      "name": "ops",
+      "created_at": {
+        "seconds": 1752915600,
+        "nanos": 0
+      }
+    },
+    "last_seen": {
+      "seconds": 1789203600,
+      "nanos": 0
+    },
+    "created_at": {
+      "seconds": 1763283600,
+      "nanos": 0
+    },
+    "register_method": "REGISTER_METHOD_AUTH_KEY",
+    "given_name": "gce-nat-01",
+    "online": true,
+    "approved_routes": [
+      "0.0.0.0/0",
+      "::/0"
+    ],
+    "available_routes": [
+      "0.0.0.0/0",
+      "::/0"
+    ],
+    "subnet_routes": [],
+    "tags": [
+      "tag:exit"
+    ]
+  }
+]

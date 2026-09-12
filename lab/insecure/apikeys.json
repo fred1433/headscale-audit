@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "prefix": "aBcDeFgH",
+    "expiration": {
+      "seconds": 2104563600,
+      "nanos": 0
+    },
+    "created_at": {
+      "seconds": 1771923600,
+      "nanos": 0
+    },
+    "last_seen": {
+      "seconds": 1789030800,
+      "nanos": 0
+    }
+  },
+  {
+    "id": 2,
+    "prefix": "zZyYxXwW",
+    "expiration": {
+      "seconds": 1788339600,
+      "nanos": 0
+    },
+    "created_at": {
+      "seconds": 1780563600,
+      "nanos": 0
+    }
+  }
+]

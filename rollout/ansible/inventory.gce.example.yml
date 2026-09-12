@@ -1,0 +1,38 @@
+# Example inventory for a Google Cloud estate. Replace the addresses, or
+# generate this file with the dynamic inventory plugin:
+#
+#   ansible-inventory -i gcp.yml --graph      # google.cloud.gcp_compute
+#
+# Hosts are grouped by role because the role is what decides the tag, and the
+# tag is what the policy grants access to.
+all:
+  vars:
+    headscale_url: https://headscale.example.com
+    # Never put a key here. Either point at a file the control machine can
+    # read, or let the play read it from Secret Manager.
+    headscale_authkey_file: ~/.config/headscale/rollout.key
+  children:
+    web:
+      vars:
+        headscale_role: web
+      hosts:
+        gce-web-01:
+          ansible_host: 10.132.0.11
+        gce-web-02:
+          ansible_host: 10.132.0.12
+    db:
+      vars:
+        headscale_role: db
+        headscale_accept_dns: false
+      hosts:
+        gce-db-01:
+          ansible_host: 10.132.0.21
+    routers:
+      vars:
+        headscale_role: router
+        # A subnet router advertises the range it serves; the route still has
+        # to be approved on the control plane (headscale-audit HS-055).
+        headscale_extra_args: "--advertise-routes=10.132.0.0/20"
+      hosts:
+        gce-router-01:
+          ansible_host: 10.132.0.31

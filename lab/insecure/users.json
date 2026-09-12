@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "name": "ops",
+    "created_at": {
+      "seconds": 1752915600,
+      "nanos": 0
+    }
+  },
+  {
+    "id": 2,
+    "name": "jan",
+    "created_at": {
+      "seconds": 1756371600,
+      "nanos": 0
+    },
+    "email": "jan@example.com"
+  },
+  {
+    "id": 3,
+    "name": "leaver",
+    "created_at": {
+      "seconds": 1758099600,
+      "nanos": 0
+    },
+    "email": "leaver@example.com"
+  }
+]

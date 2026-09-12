@@ -1,0 +1,17 @@
+// Bootstrap policy for the laboratory: the three tags exist and everything is
+// open. lab/verify.sh starts here to prove the tailnet is whole (each node
+// sees the other two), then loads the restrictive policy.
+{
+  "tagOwners": {
+    "tag:web": ["lab@"],
+    "tag:db": ["lab@"],
+    "tag:ci": ["lab@"],
+  },
+  "grants": [
+    {
+      "src": ["*"],
+      "dst": ["*"],
+      "ip": ["*"],
+    },
+  ],
+}

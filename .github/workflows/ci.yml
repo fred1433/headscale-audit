@@ -1,0 +1,88 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: python -m pip install --upgrade pip && pip install -e ".[dev]"
+      - name: Tests
+        run: pytest -q
+      - name: The tool runs on both fixtures
+        run: |
+          headscale-audit --offline-dir lab/insecure --format md | head -40
+          headscale-audit --list-checks
+
+  lab:
+    name: laboratory (headscale 0.29.3 + 3 tailscale clients)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install the audit
+        run: python -m pip install --upgrade pip && pip install -e .
+      - name: Run the laboratory and audit it
+        run: ./lab/ci/run.sh
+      - name: Report
+        if: always()
+        run: |
+          echo '## Audit of the live laboratory' >> "$GITHUB_STEP_SUMMARY"
+          cat lab/ci/out/report-live.md >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+      - name: Logs on failure
+        if: failure()
+        run: docker compose -f lab/ci/docker-compose.yml --env-file lab/ci/.env logs --tail 200 || true
+      - name: Tear down
+        if: always()
+        run: |
+          docker compose -f lab/ci/docker-compose.yml --env-file lab/ci/.env down -v || true
+          rm -f lab/ci/.env
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lab-audit
+          path: lab/ci/out/
+          if-no-files-found: ignore
+
+  rollout:
+    name: rollout scripts
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Shell syntax
+        run: |
+          for script in lab/*.sh lab/ci/run.sh rollout/*.sh; do
+            bash -n "$script" && echo "ok $script"
+          done
+      - name: shellcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
+          shellcheck -S warning rollout/enroll.sh rollout/probe.sh \
+            rollout/gce-startup-script.sh lab/up.sh lab/down.sh \
+            lab/enroll_local.sh lab/verify.sh lab/audit.sh lab/ci/run.sh
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Ansible syntax check
+        run: |
+          pip install ansible-core
+          cd rollout/ansible
+          ansible-playbook -i inventory.gce.example.yml site.yml --syntax-check

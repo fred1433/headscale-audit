@@ -1,0 +1,15 @@
+---
+# Enrol every host of the inventory.
+#
+#   ansible-playbook -i inventory.gce.example.yml site.yml --syntax-check
+#   ansible-playbook -i inventory.gce.example.yml site.yml --check
+#   ansible-playbook -i inventory.gce.example.yml site.yml
+#
+# One key per role, issued shortly before the run:
+#   headscale preauthkeys create --user <ID> --tags tag:web --expiration 1h
+- name: Enrol the estate into the Headscale tailnet
+  hosts: all
+  gather_facts: true
+  serial: "25%"
+  roles:
+    - role: headscale_enroll

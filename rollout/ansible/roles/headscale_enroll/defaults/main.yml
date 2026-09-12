@@ -1,0 +1,27 @@
+---
+# The control server every node registers against.
+headscale_url: ""
+
+# Where the pre-auth key comes from, in order of preference:
+#   headscale_authkey_file : a file on the CONTROL machine, copied to a 0600
+#                            temporary file on the target and deleted after
+#   headscale_authkey      : the key itself, from a vault or a lookup
+headscale_authkey_file: ""
+headscale_authkey: ""
+
+# Role name; the key must already carry tag:{{ headscale_role }}, because
+# headscale takes the tags from the key and refuses a registration that also
+# advertises them.
+headscale_role: ""
+
+# A server keeps its own resolver by default: on GCE, overriding it breaks
+# *.internal names and the metadata resolver.
+headscale_accept_dns: false
+headscale_accept_routes: false
+headscale_extra_args: ""
+
+# Safety switches, both off by default (see rollout/enroll.sh).
+headscale_allow_reset: false
+headscale_allow_migrate: false
+
+headscale_enroll_script_dest: /opt/headscale-audit/rollout/enroll.sh

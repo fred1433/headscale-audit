@@ -1,0 +1,63 @@
+# The laboratory, as GitHub Actions runs it: the official images, pinned by
+# digest, with the Tailscale clients in userspace networking so that no TUN
+# device and no privileged container is needed.
+services:
+  headscale:
+    image: headscale/headscale:0.29.3@sha256:0e7f1c6e4ce6c2a2a001103ecd3fa645a045adf30ac8a5234fe037b43000cd72
+    command: serve
+    volumes:
+      - ./config.yaml:/etc/headscale/config.yaml:ro
+      - ./policy.hujson:/etc/headscale/policy.hujson:ro
+      - ./derp.yaml:/etc/headscale/derp.yaml:ro
+      - headscale-data:/var/lib/headscale
+      - headscale-run:/var/run/headscale
+    ports:
+      - "8080:8080"
+
+  ts-a:
+    image: tailscale/tailscale:v1.102.3@sha256:8c42c4574ab066384fcb72f69e086a2ff1dd3652eb6f56856cee34bcf0d2f680
+    depends_on: [headscale]
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY_A}
+      TS_USERSPACE: "true"
+      TS_HOSTNAME: ci-a
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_ACCEPT_DNS: "false"
+      # No --advertise-tags: the tags come from the pre-auth key, and headscale
+      # 0.28+ rejects a registration that carries both.
+      TS_EXTRA_ARGS: --login-server=http://headscale:8080
+    volumes:
+      - ts-a:/var/lib/tailscale
+
+  ts-b:
+    image: tailscale/tailscale:v1.102.3@sha256:8c42c4574ab066384fcb72f69e086a2ff1dd3652eb6f56856cee34bcf0d2f680
+    depends_on: [headscale]
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY_B}
+      TS_USERSPACE: "true"
+      TS_HOSTNAME: ci-b
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_ACCEPT_DNS: "false"
+      TS_EXTRA_ARGS: --login-server=http://headscale:8080
+    volumes:
+      - ts-b:/var/lib/tailscale
+
+  ts-c:
+    image: tailscale/tailscale:v1.102.3@sha256:8c42c4574ab066384fcb72f69e086a2ff1dd3652eb6f56856cee34bcf0d2f680
+    depends_on: [headscale]
+    environment:
+      TS_AUTHKEY: ${TS_AUTHKEY_C}
+      TS_USERSPACE: "true"
+      TS_HOSTNAME: ci-c
+      TS_STATE_DIR: /var/lib/tailscale
+      TS_ACCEPT_DNS: "false"
+      TS_EXTRA_ARGS: --login-server=http://headscale:8080
+    volumes:
+      - ts-c:/var/lib/tailscale
+
+volumes:
+  headscale-data:
+  headscale-run:
+  ts-a:
+  ts-b:
+  ts-c:
