@@ -22,11 +22,26 @@ stop() { # stop <pidfile> <label>
   rm -f "$file"
 }
 
-for node in a b c; do
-  stop "$RUN_DIR/$node/tailscaled.pid" "tailscaled lab-$node"
+# Every node directory this lab created, including the ones lab/rollout_test.sh
+# adds, and nothing else: only pids written by these scripts are signalled.
+for pidfile in "$RUN_DIR"/*/tailscaled.pid; do
+  [ -e "$pidfile" ] || continue
+  node="$(basename "$(dirname "$pidfile")")"
+  stop "$pidfile" "tailscaled lab-$node"
   stop "$RUN_DIR/$node/witness.pid" "witness lab-$node"
   rm -f "$RUN_DIR/$node/tailscaled.sock"
 done
 stop "$RUN_DIR/headscale.pid" "headscale"
 rm -f "$RUN_DIR/headscale.sock"
+# A daemon whose pid file was lost (an interrupted run) is reported, never
+# killed blind: the pid is printed so a human decides.
+if command -v pgrep >/dev/null 2>&1; then
+  orphans="$(pgrep -f "$RUN_DIR/bin/tailscaled" 2>/dev/null || true)"
+  if [ -n "$orphans" ]; then
+    printf 'still running from an earlier run, with no pid file: %s\n' \
+      "$(printf '%s' "$orphans" | tr '\n' ' ')"
+    printf 'stop them with: kill %s\n' "$(printf '%s' "$orphans" | tr '\n' ' ')"
+  fi
+fi
+
 printf 'lab is down. State is kept in lab/.run (delete it for a clean slate).\n'
