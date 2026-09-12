@@ -6,6 +6,7 @@ import json
 from typing import Any, Sequence
 
 from . import __version__
+from . import fleet as fleet_module
 from .checks.registry import CATEGORIES
 from .model import (
     SEVERITY_LABEL,
@@ -75,6 +76,11 @@ def to_json(results: Sequence[CheckResult], inventory: Inventory) -> str:
         "scope": SCOPE_NOTE,
         "notes": inventory.notes,
         "collection_errors": inventory.collection_errors,
+        "fleet": (
+            fleet_module.summary(inventory)
+            if inventory.gce_instances is not None
+            else None
+        ),
         "checks": [result.as_dict() for result in results],
     }
     return json.dumps(payload, indent=2, sort_keys=False) + "\n"
@@ -183,6 +189,27 @@ def to_markdown(results: Sequence[CheckResult], inventory: Inventory) -> str:
         add("## Findings")
         add("")
         add("None.")
+        add("")
+
+    if inventory.gce_instances is not None:
+        table = fleet_module.rows(inventory)
+        add("## Fleet coverage")
+        add("")
+        enrolled = sum(1 for row in table if row.enrolled)
+        add(
+            f"{enrolled} of {len(table)} instances of the inventory are nodes "
+            "in this tailnet."
+        )
+        add("")
+        add("| Instance | Zone | Instance state | In headscale | Tags | Last seen | Next step |")
+        add("| --- | --- | --- | --- | --- | --- | --- |")
+        for row in table:
+            add(
+                f"| {row.name} | {row.zone} | {row.status} | "
+                f"{'yes' if row.enrolled else 'no'} | "
+                f"{', '.join(row.tags) if row.tags else '-'} | {row.last_seen} | "
+                f"{row.blocker or 'ok'} |"
+            )
         add("")
 
     for status, heading, blurb in (

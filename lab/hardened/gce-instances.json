@@ -1,0 +1,51 @@
+[
+  {
+    "name": "gce-web-01",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a/machineTypes/e2-standard-2",
+    "status": "RUNNING",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": []
+    }
+  },
+  {
+    "name": "gce-router-01",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a/machineTypes/e2-standard-2",
+    "status": "RUNNING",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": [
+        "router"
+      ]
+    }
+  },
+  {
+    "name": "gce-exit-01",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-b",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-b/machineTypes/e2-standard-2",
+    "status": "RUNNING",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": [
+        "exit"
+      ]
+    }
+  }
+]

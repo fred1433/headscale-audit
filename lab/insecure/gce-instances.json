@@ -1,0 +1,94 @@
+[
+  {
+    "name": "gce-web-01",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a/machineTypes/e2-standard-2",
+    "status": "RUNNING",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": []
+    }
+  },
+  {
+    "name": "gce-nat-01",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a/machineTypes/e2-standard-2",
+    "status": "RUNNING",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": [
+        "nat"
+      ]
+    }
+  },
+  {
+    "name": "gce-worker-03",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-b",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-b/machineTypes/e2-standard-2",
+    "status": "RUNNING",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": []
+    }
+  },
+  {
+    "name": "gce-batch-01",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-c",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-c/machineTypes/e2-standard-2",
+    "status": "RUNNING",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": []
+    }
+  },
+  {
+    "name": "gce-batch-02",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-c",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-c/machineTypes/e2-standard-2",
+    "status": "RUNNING",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": []
+    }
+  },
+  {
+    "name": "gce-old-01",
+    "zone": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a",
+    "machineType": "https://www.googleapis.com/compute/v1/projects/example/zones/europe-north1-a/machineTypes/e2-standard-2",
+    "status": "TERMINATED",
+    "networkInterfaces": [
+      {
+        "networkIP": "10.132.0.20",
+        "network": "default"
+      }
+    ],
+    "tags": {
+      "items": []
+    }
+  }
+]

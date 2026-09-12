@@ -274,6 +274,40 @@ CASES: list[tuple[str, Mutator]] = [
         ),
     ),
     (
+        "HS-070",
+        lambda inv: inv.gce_instances.append(
+            {"name": "gce-batch-09", "zone": "z/europe-north1-c", "status": "RUNNING"}
+        ),
+    ),
+    (
+        "HS-071",
+        lambda inv: inv.nodes.append(
+            {
+                "id": "9",
+                "given_name": "gce-ghost-01",
+                "tags": ["tag:web"],
+                "online": True,
+                "last_seen": _days(inv, 0),
+            }
+        ),
+    ),
+    (
+        "HS-072",
+        lambda inv: (
+            inv.gce_instances.append(
+                {"name": "gce-quiet-01", "zone": "z/europe-north1-a", "status": "RUNNING"}
+            ),
+            inv.nodes.append(
+                {
+                    "id": "9",
+                    "given_name": "gce-quiet-01",
+                    "tags": ["tag:web"],
+                    "online": False,
+                }
+            ),
+        ),
+    ),
+    (
         "HS-064",
         lambda inv: inv.preauthkeys.append(
             {
@@ -315,6 +349,23 @@ def test_every_control_has_a_case() -> None:
     covered |= {"HS-008", "HS-043"}
     missing = sorted(check.id for check in all_checks() if check.id not in covered)
     assert missing == []
+
+
+def test_a_terminated_instance_is_not_a_missing_node(base: Inventory) -> None:
+    """An instance that is not running has nothing to enrol yet."""
+    base.gce_instances.append(
+        {"name": "gce-old-09", "zone": "z/europe-north1-a", "status": "TERMINATED"}
+    )
+    assert "HS-070" not in failing_ids(base)
+
+
+def test_an_untagged_node_is_not_a_fleet_orphan(base: Inventory) -> None:
+    """A laptop is not expected to appear in an instance inventory."""
+    base.nodes.append(
+        {"id": "9", "given_name": "laptop-sam", "tags": [], "online": True,
+         "expiry": _days(base, 90)}
+    )
+    assert "HS-071" not in failing_ids(base)
 
 
 def test_oidc_private_issuer_is_a_question_not_a_verdict(base: Inventory) -> None:

@@ -4,8 +4,8 @@
 This is the real output of `headscale-audit` against the laboratory
 started by `lab/up.sh`, not an illustration.
 
-- Date: 2026-09-12T13:28:42Z
-- Repository commit: f303f9b
+- Date: 2026-09-12T13:31:37Z
+- Repository commit: e954139
 - Headscale: headscale version v0.29.3
 - Tailscale clients: 1.102.3
 - Host: Darwin arm64
@@ -26,9 +26,9 @@ Three findings are expected here and say something about the tool:
 
 # Headscale audit report
 
-- Generated: 2026-09-12T13:28:41+00:00
+- Generated: 2026-09-12T13:31:36+00:00
 - Source: config /Users/frederic/ProjetsDev/headscale-audit/lab/.run/config.yaml + API http://127.0.0.1:18080
-- Read: config `/Users/frederic/ProjetsDev/headscale-audit/lab/.run/config.yaml`, policy `/Users/frederic/ProjetsDev/headscale-audit/lab/.run/policy.hujson`, 4 nodes, 1 users, 5 pre-auth keys, 4 API keys
+- Read: config `/Users/frederic/ProjetsDev/headscale-audit/lab/.run/config.yaml`, policy `/Users/frederic/ProjetsDev/headscale-audit/lab/.run/policy.hujson`, 4 nodes, 1 users, 5 pre-auth keys, 5 API keys
 - Tool: headscale-audit 0.1.0; controls written against Headscale 0.29.3; server reports v0.29.3
 - Policy mode: file (the file on disk, which is what a reload would load, not proof of what the running server holds in memory)
 
@@ -42,7 +42,7 @@ Scope: this audit reads what it was given. It does not scan the network, does no
 | UNKNOWN | 0 |
 | PASS | 35 |
 | NOT_APPLICABLE | 15 |
-| NOT_EVALUATED | 0 |
+| NOT_EVALUATED | 3 |
 | ERROR | 0 |
 
 3 finding(s): 2 high, 0 medium, 1 low, 0 to verify. A control that is NOT_EVALUATED is not a pass: it had nothing to read.
@@ -80,6 +80,16 @@ Scope: this audit reads what it was given. It does not scan the network, does no
 - **Why it matters**: Expired credentials are inert, but they hide the live ones in every listing and make it harder to answer what is actually valid today.
 - **Fix**: Delete them: headscale preauthkeys delete -i <id>, headscale apikeys delete --prefix <prefix>.
 - **Reference**: https://headscale.net/0.29.3/ref/registration/
+
+## Not evaluated
+
+These controls had nothing to read. They are not passes.
+
+| Id | Control | Reason |
+| --- | --- | --- |
+| HS-070 | Instances missing from the tailnet | no GCE instance inventory provided |
+| HS-071 | Tagged node with no matching instance | no GCE instance inventory provided |
+| HS-072 | Instance enrolled but not connecting | no GCE instance inventory provided |
 
 ## Not applicable
 

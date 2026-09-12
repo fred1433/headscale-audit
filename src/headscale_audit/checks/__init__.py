@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from ..model import Check
-from . import keys, nodes, policy, server  # noqa: F401  (import registers them)
+from . import fleet, keys, nodes, policy, server  # noqa: F401  (registers them)
 from .registry import CATEGORIES, CHECKS
 
 

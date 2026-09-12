@@ -139,5 +139,30 @@
     "tags": [
       "tag:exit"
     ]
+  },
+  {
+    "id": 5,
+    "machine_key": "mkey:redacted05",
+    "node_key": "nodekey:redacted05",
+    "ip_addresses": [
+      "100.64.0.5"
+    ],
+    "name": "gce-worker-03",
+    "user": {
+      "id": 1,
+      "name": "ops"
+    },
+    "created_at": {
+      "seconds": 1756371600,
+      "nanos": 0
+    },
+    "register_method": "REGISTER_METHOD_AUTH_KEY",
+    "given_name": "gce-worker-03",
+    "online": false,
+    "approved_routes": [],
+    "available_routes": [],
+    "tags": [
+      "tag:web"
+    ]
   }
 ]

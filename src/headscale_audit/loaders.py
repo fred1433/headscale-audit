@@ -164,6 +164,16 @@ def from_directory(path: str, inventory: Inventory | None = None) -> Inventory:
         if file_path:
             with open(file_path, "r", encoding="utf-8") as handle:
                 setattr(inv, section, _as_list(json.load(handle), section))
+
+    instances = _first_existing(
+        path, ["gce-instances.json", "instances.json"]
+    )
+    if instances:
+        with open(instances, "r", encoding="utf-8") as handle:
+            payload = json.load(handle)
+        if isinstance(payload, dict):
+            payload = payload.get("items") or []
+        inv.gce_instances = [item for item in payload if isinstance(item, dict)]
     return inv
 
 

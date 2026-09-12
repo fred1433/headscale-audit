@@ -34,8 +34,9 @@ HEADSCALE_API_KEY=... headscale-audit --api-url https://headscale.example.com \
 
 ## The controls
 
-53 controls over four areas: server configuration (26), access control policy
-(14), nodes, routes and users (8), pre-auth and API keys (5). The full table,
+56 controls over five areas: server configuration (26), access control policy
+(14), nodes, routes and users (8), pre-auth and API keys (5), fleet coverage
+(3). The full table,
 with the exact condition each one asserts, is in
 [`docs/checks.md`](docs/checks.md); `headscale-audit --list-checks` prints it too.
 
@@ -50,6 +51,21 @@ Every control ends in one of PASS, FAIL, UNKNOWN, NOT_APPLICABLE,
 NOT_EVALUATED or ERROR, and the report counts them. A control that could not
 read what it needs is never reported as a pass, and a control that is not sure
 says so instead of raising a false alarm.
+
+## Fleet coverage
+
+Pass an instance inventory and the report gains a coverage table: one line per
+machine, saying whether it is in the tailnet, which tags it carries, when it
+was last seen and what to look at next.
+
+```shell
+gcloud compute instances list --format=json > instances.json
+headscale-audit --config /etc/headscale/config.yaml --nodes nodes.json \
+                --gce-inventory instances.json
+```
+
+The machines that never appear in headscale are the ones a rollout never
+reached; `rollout/probe.sh` runs on one of them and says which step fails.
 
 ## The laboratory
 

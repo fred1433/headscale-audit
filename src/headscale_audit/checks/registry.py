@@ -13,6 +13,7 @@ CATEGORIES = {
     "policy": "Access control policy",
     "nodes": "Nodes, routes and users",
     "keys": "Pre-auth keys and API keys",
+    "fleet": "Fleet coverage",
 }
 
 DOC = "https://headscale.net/0.29.3"

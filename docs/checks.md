@@ -80,3 +80,11 @@ Regenerate this file with `python scripts/gen_checks_doc.py`.
 | `HS-063` | API key long-lived or without expiry | API keys expire within the upstream default window | [doc](https://headscale.net/0.29.3/ref/api/) |
 | `HS-064` | Expired credential left in place | expired credentials are deleted | [doc](https://headscale.net/0.29.3/ref/registration/) |
 
+## Fleet coverage
+
+| Id | Control | Asserts | Reference |
+| --- | --- | --- | --- |
+| `HS-070` | Instances missing from the tailnet | every running instance of the inventory is a node in headscale | [doc](https://headscale.net/0.29.3/ref/registration/) |
+| `HS-071` | Tagged node with no matching instance | every tagged node corresponds to an instance of the inventory | [doc](https://headscale.net/0.29.3/ref/registration/) |
+| `HS-072` | Instance enrolled but not connecting | every enrolled instance is online or was seen recently | [doc](https://headscale.net/0.29.3/ref/registration/) |
+
