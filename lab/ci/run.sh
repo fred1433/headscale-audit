@@ -7,7 +7,6 @@ set -euo pipefail
 
 CI_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LAB_DIR="$(cd "$CI_DIR/.." && pwd)"
-ROOT_DIR="$(cd "$LAB_DIR/.." && pwd)"
 OUT_DIR="${OUT_DIR:-$CI_DIR/out}"
 AUDIT="${AUDIT:-headscale-audit}"
 COMPOSE="docker compose -f $CI_DIR/docker-compose.yml --env-file $CI_DIR/.env"

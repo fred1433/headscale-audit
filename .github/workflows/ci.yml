@@ -77,7 +77,8 @@ jobs:
           sudo apt-get update -qq && sudo apt-get install -y -qq shellcheck
           shellcheck -S warning rollout/enroll.sh rollout/probe.sh \
             rollout/gce-startup-script.sh lab/up.sh lab/down.sh \
-            lab/enroll_local.sh lab/verify.sh lab/audit.sh lab/ci/run.sh
+            lab/enroll_local.sh lab/verify.sh lab/audit.sh lab/rollout_test.sh \
+            lab/ci/run.sh
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

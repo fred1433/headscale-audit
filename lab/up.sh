@@ -25,30 +25,10 @@ HS_METRICS_PORT="${HS_METRICS_PORT:-19090}"
 HS_GRPC_PORT="${HS_GRPC_PORT:-15043}"
 SERVER_URL="http://127.0.0.1:${HS_PORT}"
 
-NODES="a b c"
-node_tag() {
-  case "$1" in
-    a) echo "tag:web" ;;
-    b) echo "tag:db" ;;
-    c) echo "tag:ci" ;;
-  esac
-}
-node_index() {
-  case "$1" in
-    a) echo 0 ;;
-    b) echo 1 ;;
-    c) echo 2 ;;
-  esac
-}
-node_port()   { echo $((41651 + $(node_index "$1"))); }
-node_socks()  { echo $((11081 + $(node_index "$1"))); }
-node_http()   { echo $((18091 + $(node_index "$1"))); }
-
 say() { printf '\n== %s\n' "$*"; }
 die() { printf 'lab: %s\n' "$*" >&2; exit 1; }
 
 hs()  { "$BIN_DIR/headscale" -c "$RUN_DIR/config.yaml" "$@"; }
-ts()  { local node="$1"; shift; "$BIN_DIR/tailscale" --socket "$RUN_DIR/$node/tailscaled.sock" "$@"; }
 
 wait_for() { # wait_for <seconds> <description> <command...>
   local deadline=$(( $(date +%s) + $1 )); local what="$2"; shift 2
